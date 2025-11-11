@@ -11,11 +11,19 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "cpf")
     private String cpf;
+    @Column(name = "email")
     private String email;
+    @Column(name = "senha")
     private String senha;
+
+    @ManyToOne
+    @JoinColumn(name = "id_local_trabalho")
     private LocalizacaoTrabalho locTrabalho;
+    @OneToMany(mappedBy = "usuario")
     private List<Mensagem> mensagens;
 
     public Usuario() {
