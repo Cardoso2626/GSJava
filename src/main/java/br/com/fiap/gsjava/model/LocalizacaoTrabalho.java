@@ -1,5 +1,6 @@
 package br.com.fiap.gsjava.model;
 
+import br.com.fiap.gsjava.enums.TipoTrabalho;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class LocalizacaoTrabalho {
     @Column(name = "id")
     private Long id;
     @Column(name = "tipo")
-    private String tipo;
+    private TipoTrabalho tipo;
     @Column(name = "graus_celcius")
     private int grausCelcius;
     @Column(name = "nivel_umidade")
@@ -24,7 +25,7 @@ public class LocalizacaoTrabalho {
 
     }
 
-    public LocalizacaoTrabalho(Long id, String tipo, int grausCelcius, float nivelUmidade, List<Usuario> usuarios) {
+    public LocalizacaoTrabalho(Long id, TipoTrabalho tipo, int grausCelcius, float nivelUmidade, List<Usuario> usuarios) {
         this.id = id;
         this.tipo = tipo;
         this.grausCelcius = grausCelcius;
@@ -48,11 +49,11 @@ public class LocalizacaoTrabalho {
         this.id = id;
     }
 
-    public String getTipo() {
+    public TipoTrabalho getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoTrabalho tipo) {
         this.tipo = tipo;
     }
 
