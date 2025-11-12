@@ -7,7 +7,12 @@ import br.com.fiap.gsjava.model.Mensagem;
 import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.MensagemRepository;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MensagemService {
@@ -16,6 +21,16 @@ public class MensagemService {
     public MensagemService(MensagemRepository mensagemRepository, UsuarioRepository usuarioRepository) {
         this.mensagemRepository = mensagemRepository;
         this.usuarioRepository = usuarioRepository;
+    }
+
+    public Page<MensagemResponse> listarMensagensPorPagina(Pageable pageable) {
+     return mensagemRepository.findAll(pageable)
+             .map(m -> new MensagemResponse(
+                     m.getId(),
+                     m.getMensagem(),
+                     m.getNivelEstresse(),
+                     m.getUsuario() != null ? m.getUsuario().getId() : null
+             ));
     }
 
     public MensagemResponse criarMensagem(MensagemRequest mensagemRequest) {
@@ -63,5 +78,16 @@ public class MensagemService {
                 mensagem.getNivelEstresse(),
                 mensagem.getUsuario() != null ? mensagem.getUsuario().getId() : null
         );
+    }
+
+    public List<MensagemResponse> listarMensagens (){
+        List<Mensagem> mensagens = mensagemRepository.findAll();
+        return mensagens.stream()
+                .map(m -> new MensagemResponse(
+                        m.getId(),
+                        m.getMensagem(),
+                        m.getNivelEstresse(),
+                        m.getUsuario() != null ? m.getUsuario().getId() : null
+                )).collect(Collectors.toList());
     }
 }

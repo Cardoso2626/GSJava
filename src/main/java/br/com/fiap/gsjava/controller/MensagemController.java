@@ -4,9 +4,13 @@ import br.com.fiap.gsjava.DTO.MensagemRequestDTO;
 import br.com.fiap.gsjava.DTO.MensagemResponse;
 import br.com.fiap.gsjava.service.MensagemService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/mensagem")
@@ -36,5 +40,16 @@ public class MensagemController {
     public ResponseEntity<MensagemResponse> atualizar(@PathVariable Long id, @RequestBody @Valid MensagemRequestDTO mensagemRequest) {
         MensagemResponse mensagem = mensagemService.autalizarMensagem(id, mensagemRequest);
         return ResponseEntity.ok(mensagem);
+    }
+
+    @GetMapping("/paginacao/mensagens")
+    public ResponseEntity<Page<MensagemResponse>> paginar(Pageable pageable) {
+        return ResponseEntity.ok(mensagemService.listarMensagensPorPagina(pageable));
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<MensagemResponse>> listar(){
+        List<MensagemResponse> mensagens = mensagemService.listarMensagens();
+        return ResponseEntity.ok(mensagens);
     }
 }
