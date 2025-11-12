@@ -8,7 +8,9 @@ import br.com.fiap.gsjava.model.Login;
 import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.LoginRepository;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoginService {
@@ -21,6 +23,8 @@ public class LoginService {
 
     }
 
+    @Transactional
+    @CachePut(value = "login", key = "#result.id")
     public LoginResponse fazerLogin(LoginRequestDTO loginRequest) {
         Usuario usuario = userRepository.findByEmailAndSenha(loginRequest.email(), loginRequest.senha());
         if (usuario == null){

@@ -7,9 +7,13 @@ import br.com.fiap.gsjava.model.Mensagem;
 import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.MensagemRepository;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +27,7 @@ public class MensagemService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    @Cacheable(value = "listaMensagens", key = "#pageable.pageNumber")
     public Page<MensagemResponse> listarMensagensPorPagina(Pageable pageable) {
      return mensagemRepository.findAll(pageable)
              .map(m -> new MensagemResponse(
@@ -33,6 +38,9 @@ public class MensagemService {
              ));
     }
 
+    @Transactional
+    @CachePut(value = "mensagem", key = "#result.id")
+    @CacheEvict(value = "listaMensagens", allEntries = true)
     public MensagemResponse criarMensagem(MensagemRequest mensagemRequest) {
         Mensagem mensagem = new Mensagem();
         mensagem.setMensagem(mensagemRequest.getMensagem());
@@ -48,6 +56,7 @@ public class MensagemService {
         );
     }
 
+    @Cacheable(value = "mensagem", key = "#id")
     public MensagemResponse pegarPorId(Long id){
         Mensagem mensagem = mensagemRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível achar a mensagem"));
         return new MensagemResponse(
@@ -58,10 +67,15 @@ public class MensagemService {
         );
     }
 
+    @Transactional
+    @CacheEvict(value = {"mensagem", "listaMensagens"}, key = "#id", allEntries = true)
+
     public void excluirMensagem(Long id){
         mensagemRepository.deleteById(id);
     }
 
+    @Transactional
+    @CachePut(value = "mensagem", key = "#id")
     public MensagemResponse autalizarMensagem (Long id, MensagemRequestDTO mensagemRequest){
         Mensagem mensagem = mensagemRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível achar a mensagem"));
         mensagem.setMensagem(mensagemRequest.mensagem());
@@ -80,6 +94,7 @@ public class MensagemService {
         );
     }
 
+    @Cacheable(value = "listaMensagens")
     public List<MensagemResponse> listarMensagens (){
         List<Mensagem> mensagens = mensagemRepository.findAll();
         return mensagens.stream()

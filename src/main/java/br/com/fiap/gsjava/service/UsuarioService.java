@@ -11,7 +11,11 @@ import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.LocalizacaoTrabalhoRepository;
 import br.com.fiap.gsjava.repository.MensagemRepository;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +32,8 @@ public class UsuarioService {
     }
 
 
+    @Transactional
+    @CachePut(value = "usuario", key = "#result.id")
     public UsuarioResponse criarUsuario(UsuarioRequest usuarioRequest){
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioRequest.getNome());
@@ -49,11 +55,13 @@ public class UsuarioService {
         );
     }
 
+    @Transactional
+    @CacheEvict(value = "usuario", key = "#id")
     public void deletarUsuario(Long id){
         usuarioRepository.deleteById(id);
     }
 
-
+    @Cacheable(value = "usuario", key = "#id")
     public UsuarioResponse pegarPorId(Long id){
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o id"));
 
@@ -69,7 +77,8 @@ public class UsuarioService {
 
         );
     }
-
+    @Transactional
+    @CachePut(value = "usuario", key = "#id")
     public UsuarioResponse atualizarUsuario(Long id, UsuarioRequestDTO usuarioRequest){
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
         usuario.setNome(usuarioRequest.nome());

@@ -7,7 +7,11 @@ import br.com.fiap.gsjava.model.LocalizacaoTrabalho;
 import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.LocalizacaoTrabalhoRepository;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +26,8 @@ public class LocalizacaoTrabalhoService {
         this.localizacaoTrabalhoRepository = localizacaoTrabalhoRepository;
         this.usuarioRepository = usuarioRepository;
     }
-
+    @Transactional
+    @CachePut(value = "localizacao", key = "#result.id")
     public LocalizacaoTrabalhoResponse criarLocalizacao(LocalizacaoTrabalhoRequest request) {
         LocalizacaoTrabalho loc = new LocalizacaoTrabalho();
         loc.setTipo(request.getTipo());
@@ -41,10 +46,12 @@ public class LocalizacaoTrabalhoService {
         );
     }
 
+    @Transactional
+    @CacheEvict(value = "localizacao", key = "#id")
     public void deletarLocalizacao(Long id) {
         localizacaoTrabalhoRepository.deleteById(id);
     }
-
+    @Cacheable(value = "localizacao", key = "#id")
     public LocalizacaoTrabalhoResponse pegarPorId(Long id) {
         LocalizacaoTrabalho loc = localizacaoTrabalhoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Localização não encontrada"));
@@ -59,6 +66,8 @@ public class LocalizacaoTrabalhoService {
         );
     }
 
+    @Transactional
+    @CachePut(value = "localizacao", key = "#id")
     public LocalizacaoTrabalhoResponse atualizarLocalizacao(Long id, LocalizacaoTrabalhoRequestDTO requestDTO) {
         LocalizacaoTrabalho loc = localizacaoTrabalhoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Localização não encontrada"));
