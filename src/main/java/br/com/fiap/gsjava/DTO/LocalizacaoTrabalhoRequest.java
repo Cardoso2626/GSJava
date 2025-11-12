@@ -2,25 +2,20 @@ package br.com.fiap.gsjava.DTO;
 
 
 import br.com.fiap.gsjava.enums.TipoTrabalho;
-import br.com.fiap.gsjava.model.Usuario;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
 public class LocalizacaoTrabalhoRequest {
 
-    @NotBlank(message = "O tipo é obrigatório, deve ser 'HIBRIDO', 'REMOTO' ou 'PRESENCIAL'")
+    @NotNull(message = "O tipo é obrigatório, deve ser 'HIBRIDO', 'HOME' ou 'PRESENCIAL'")
     private TipoTrabalho tipo;
 
-    @NotBlank(message = "Os graus celcius são obrigatórios")
+    @NotNull(message = "Os graus celcius são obrigatórios")
     @PositiveOrZero(message = "O nivel de umidade não pode ser = 0")
     private int grausCelcius;
 
-    @NotBlank(message = "O tipo é obrigatório, deve ser 'HIBRIDO', 'REMOTO' ou 'PRESENCIAL'")
+    @NotNull(message = "O nivel de umidade é obrigatório")
     @DecimalMin(value = "0.0", message = "O nível de umidade deve ser maior ou igual a 0")
     @DecimalMax(value = "100.0", message = "O nível de umidade não pode ultrapassar 100")
     private float nivelUmidade;
