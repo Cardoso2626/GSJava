@@ -33,29 +33,6 @@ public class UsuarioService {
 
 
     @Transactional
-    @CachePut(value = "usuario", key = "#result.id")
-    public UsuarioResponse criarUsuario(UsuarioRequest usuarioRequest){
-        Usuario usuario = new Usuario();
-        usuario.setNome(usuarioRequest.getNome());
-        usuario.setCpf(usuarioRequest.getCpf());
-        usuario.setEmail(usuarioRequest.getEmail());
-        usuario.setSenha(usuarioRequest.getSenha());
-        usuario.setLocTrabalho(null);
-        usuario.setMensagens(null);
-        usuario = usuarioRepository.save(usuario);
-
-        return new UsuarioResponse(
-          usuario.getId(),
-                usuario.getNome(),
-                usuario.getCpf(),
-                usuarioRequest.getEmail(),
-                usuario.getSenha(),
-                null,
-                null
-        );
-    }
-
-    @Transactional
     @CacheEvict(value = "usuario", key = "#id")
     public void deletarUsuario(Long id){
         usuarioRepository.deleteById(id);
@@ -73,7 +50,8 @@ public class UsuarioService {
                 usuario.getEmail(),
                 usuario.getSenha(),
                 usuario.getLocTrabalho() != null ? usuario.getLocTrabalho().getId() : null,
-                ids
+                ids,
+                usuario.getRole()
 
         );
     }
@@ -95,6 +73,7 @@ public class UsuarioService {
             List<Mensagem> mensagensIds = mensagemRepository.findAllById(usuarioRequest.idMensagens());
             usuario.setMensagens(mensagensIds);
         }
+        usuario.setRole(usuarioRequest.role());
         usuario = usuarioRepository.save(usuario);
 
         List<Long> ids = usuario.getMensagens().stream().map(Mensagem::getId).collect(Collectors.toList());
@@ -105,7 +84,8 @@ public class UsuarioService {
                 usuario.getEmail(),
                 usuario.getSenha(),
                 usuario.getLocTrabalho() != null ? usuario.getLocTrabalho().getId() : null,
-                ids
+                ids,
+                usuario.getRole()
         );
 
     }

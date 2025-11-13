@@ -1,20 +1,45 @@
 package br.com.fiap.gsjava.controller;
 
+import br.com.fiap.gsjava.DTO.LoginRequestDTO;
 import br.com.fiap.gsjava.DTO.UsuarioRequest;
 import br.com.fiap.gsjava.DTO.UsuarioRequestDTO;
 import br.com.fiap.gsjava.DTO.UsuarioResponse;
+import br.com.fiap.gsjava.model.Usuario;
+import br.com.fiap.gsjava.repository.UsuarioRepository;
 import br.com.fiap.gsjava.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
-    public final UsuarioService usuarioService;
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
+    private AuthenticationManager authenticationManager;
+    private UsuarioRepository repository;
+
+    @PostMapping("/auth/login")
+    public ResponseEntity login (@RequestBody @Valid LoginRequestDTO data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity register (@RequestBody @Valid UsuarioRequest data) {
+        if(this.repository.findByEmail(data.getEmail()) != null) return ResponseEntity.badRequest().build();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.getSenha());
+        Usuario user = new Usuario(data.getNome(),data.getCpf(),data.getEmail(), encryptedPassword, data.getRole());
+
+        this.repository.save(user);
+
+        return ResponseEntity.ok().build();
     }
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> pegarPorId(@PathVariable Long id) {
@@ -27,11 +52,6 @@ public class UsuarioController {
         usuarioService.deletarUsuario(id);
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioResponse> inserir(@RequestBody @Valid UsuarioRequest usuarioRequest) {
-        UsuarioResponse usuario = usuarioService.criarUsuario(usuarioRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
-    }
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponse> atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
         UsuarioResponse usuario = usuarioService.atualizarUsuario(id, usuarioRequest);

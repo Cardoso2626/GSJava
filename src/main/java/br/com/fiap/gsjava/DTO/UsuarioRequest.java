@@ -1,5 +1,6 @@
 package br.com.fiap.gsjava.DTO;
 
+import br.com.fiap.gsjava.model.UsuarioRole;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +24,16 @@ public class UsuarioRequest {
     @NotBlank(message="A senha é obrigatória!")
     @Size(min = 2, max = 100, message = "A senha deve ter pelo menos 2 caracteres e no máximo 100")
     private String senha;
+
+    private UsuarioRole role;
+
+    public UsuarioRole getRole() {
+        return role;
+    }
+
+    public void setRole(UsuarioRole role) {
+        this.role = role;
+    }
 
     public String getNome() {
         return nome;
