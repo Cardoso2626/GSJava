@@ -1,11 +1,9 @@
 package br.com.fiap.gsjava.controller;
 
-import br.com.fiap.gsjava.DTO.LoginRequestDTO;
-import br.com.fiap.gsjava.DTO.UsuarioRequest;
-import br.com.fiap.gsjava.DTO.UsuarioRequestDTO;
-import br.com.fiap.gsjava.DTO.UsuarioResponse;
+import br.com.fiap.gsjava.DTO.*;
 import br.com.fiap.gsjava.model.Usuario;
 import br.com.fiap.gsjava.repository.UsuarioRepository;
+import br.com.fiap.gsjava.security.TokenService;
 import br.com.fiap.gsjava.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +19,20 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UsuarioRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/auth/login")
     public ResponseEntity login (@RequestBody @Valid LoginRequestDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/auth/register")
