@@ -32,6 +32,7 @@ public class UsuarioService {
     }
 
 
+
     @Transactional
     @CacheEvict(value = "usuario", key = "#id")
     public void deletarUsuario(Long id){
@@ -55,6 +56,24 @@ public class UsuarioService {
 
         );
     }
+    @Cacheable(value = "usuario", key = "#email")
+    public UsuarioResponse pegarPorEmail(String email){
+        Usuario usuario = usuarioRepository.findOptionalByEmail(email).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o email"));
+
+        List<Long> ids = usuario.getMensagens().stream().map(Mensagem::getId).collect(Collectors.toList());
+        return new UsuarioResponse(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getCpf(),
+                usuario.getEmail(),
+                usuario.getSenha(),
+                usuario.getLocTrabalho() != null ? usuario.getLocTrabalho().getId() : null,
+                ids,
+                usuario.getRole()
+
+        );
+    }
+
     @Transactional
     @CachePut(value = "usuario", key = "#id")
     public UsuarioResponse atualizarUsuario(Long id, UsuarioRequestDTO usuarioRequest){

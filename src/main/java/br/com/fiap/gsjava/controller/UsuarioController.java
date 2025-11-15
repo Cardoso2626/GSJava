@@ -61,4 +61,10 @@ public class UsuarioController {
         UsuarioResponse usuario = usuarioService.atualizarUsuario(id, usuarioRequest);
         return ResponseEntity.ok(usuario);
     }
+
+    @GetMapping("/porEmail/{email}")
+    public ResponseEntity<UsuarioResponse> pegarPorEmail(@PathVariable String email) {
+        UsuarioResponse usuario = usuarioService.pegarPorEmail(email);
+        return ResponseEntity.ok(usuario);
+    }
 }

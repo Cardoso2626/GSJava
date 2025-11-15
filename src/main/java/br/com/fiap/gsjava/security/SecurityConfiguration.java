@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/usuario/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuario/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/usuario/porEmail/{email}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/mensagem").permitAll()
                         .requestMatchers(HttpMethod.POST, "/localizacao").permitAll()
                         .requestMatchers(HttpMethod.POST, "/springia/generate").permitAll()
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/mensagem/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/mensagem/listar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/mensagem//paginacao/mensagens").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/rabbit/mensagem").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/mensagem/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/mensagem/{id}").hasRole("ADMIN")

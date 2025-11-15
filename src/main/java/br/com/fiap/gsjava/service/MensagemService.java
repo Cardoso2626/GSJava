@@ -105,4 +105,5 @@ public class MensagemService {
                         m.getUsuario() != null ? m.getUsuario().getId() : null
                 )).collect(Collectors.toList());
     }
+
 }
