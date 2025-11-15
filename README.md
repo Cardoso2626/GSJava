@@ -1,4 +1,4 @@
-## WorkClean 
+## WorkClean - global solutions
 📌 Sobre o Projeto
 
 O WorkClean é uma aplicação desenvolvida em Java com Spring Boot, focada em fornecer um ambiente seguro, escalável e inteligente para gerenciamento de operações.
@@ -34,6 +34,12 @@ O objetivo do projeto é demonstrar uma arquitetura moderna e profissional, inte
 - Exception Handler (tratamento de erros)
 
 - Deploy da aplicação (render)
+  
+- CACHE para otimização da API
+
+- Bean validation
+
+- Paginação
 
 ## INFRAESTRUTURA: 
 
