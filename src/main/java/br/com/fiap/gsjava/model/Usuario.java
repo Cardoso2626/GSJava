@@ -30,7 +30,7 @@ public class Usuario implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "id_local_trabalho")
     private LocalizacaoTrabalho locTrabalho;
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Mensagem> mensagens;
 
 

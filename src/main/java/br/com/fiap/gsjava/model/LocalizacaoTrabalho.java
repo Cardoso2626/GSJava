@@ -18,7 +18,7 @@ public class LocalizacaoTrabalho {
     private int grausCelcius;
     @Column(name = "nivel_umidade")
     private float nivelUmidade;
-    @OneToMany(mappedBy = "locTrabalho")
+    @OneToMany(mappedBy = "locTrabalho", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
 
     public LocalizacaoTrabalho() {

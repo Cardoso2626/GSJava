@@ -18,7 +18,7 @@ public class MessageController {
         this.producer = producer;
     }
 
-    @PostMapping("/mensagem")
+    @PostMapping("/mensagemRbbt")
     public ResponseEntity<?> enviar(@Valid @RequestBody MensagemRequest request) {
         producer.sendMessage(request);
         return ResponseEntity.ok("Mensagem enviada para a fila");
