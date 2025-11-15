@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/usuario/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/mensagem").permitAll()
                         .requestMatchers(HttpMethod.POST, "/localizacao").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/springia/generate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/localizacao/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/mensagem/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/mensagem/listar").permitAll()
