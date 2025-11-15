@@ -35,12 +35,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     implementation 'dev.langchain4j:langchain4j:0.34.0'
     implementation 'dev.langchain4j:langchain4j-ollama:0.34.0'
     implementation 'com.auth0:java-jwt:4.5.0'
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.amqp:spring-rabbit-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
