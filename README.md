@@ -6,9 +6,9 @@ O sistema implementa autenticação via token Bearer, comunicação assíncrona 
 
 O objetivo do projeto é demonstrar uma arquitetura moderna e profissional, integrando segurança, mensageria e inteligência artificial.
 
-- LINK DO DEPLOY: 
-- LINK DO VIDEO EXPLICATIVO:
-- LINK DO PITCH: 
+- LINK DO DEPLOY: https://gsjava-560n.onrender.com
+- LINK DO VIDEO EXPLICATIVO: https://youtu.be/a_ORPb0k6aM
+- LINK DO PITCH: https://youtu.be/wHZVH2bKiCo
 
 👥 Integrantes
 
