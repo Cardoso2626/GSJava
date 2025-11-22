@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/mensagem/listar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/mensagem//paginacao/mensagens").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/rabbit/mensagem").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/rabbit/mensagemRbbt").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/mensagem/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/mensagem/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/localizacao/{id}").hasRole("ADMIN")
